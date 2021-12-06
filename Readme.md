@@ -1,6 +1,6 @@
 # measure-latency-to-azure-endpoints-with-pwsh
 
-As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of PSPING to do latency checks. In fact, this script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
+As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In fact, this script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
 
 Sure, you could also leverage .NET classes and doing manual measurement to archive the same but as I personally do use psping actually quite often, I tried to incorporate it somehow without reinventing the wheel.
 
@@ -18,6 +18,8 @@ The script will auto-download psping if not yet exists in script folder.
 + DNS Client Resolution
 - Not working when proxy usage is required
 ```
+
+`You could also replace the pre-defined Azure Endpoints by some other M365 endpoints, or just to any endpoint you are interested in, as well changing the connecting port.`
 
 **EXAMPLES**
 
