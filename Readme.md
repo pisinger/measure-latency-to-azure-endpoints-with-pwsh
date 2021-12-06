@@ -11,7 +11,7 @@ Sure, you could also leverage .NET classes and doing manual measurement to archi
 The script will auto-download psping if not yet exists in script folder.
 > PSPING: <https://docs.microsoft.com/en-us/sysinternals/downloads/psping/>
 
-**Requirements**
+**Requirements:**
 
 ```diff
 + Direct Connectivity allowing TCP 443 outbound
@@ -21,7 +21,7 @@ The script will auto-download psping if not yet exists in script folder.
 
 `You could also replace the pre-defined Azure Endpoints by some other M365 endpoints, or just to any endpoint you are interested in, as well changing the connecting port.`
 
-**EXAMPLES**
+**EXAMPLES:**
 
 ```powershell
 .\measure-latency-to-azure-endpoints-via-psping.ps1
