@@ -2,14 +2,21 @@
 
 As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In fact, this script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
 
-Sure, you could also leverage .NET classes and doing manual measurement to archive the same but as I personally do use psping actually quite often, I tried to incorporate it somehow without reinventing the wheel.
+The psping-based script will also auto-download psping itself if not yet exists in script folder.
+> PSPING: <https://docs.microsoft.com/en-us/sysinternals/downloads/psping/>
+
+---
+
+Sure, you could also leverage `.NET classes` and doing manual measurement to archive the same but as I personally do use psping actually quite often, I tried to incorporate it somehow without reinventing the wheel.
+
+**UPDATE (14-Dec-2021):**
+`This repo does now also offer a script doing the same in .NET.` So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
 
 > Note: PowerShell Core required: <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/>
 
 `This might be helpful in case you want to run latency checks automated from internal Windows clients or edge devices, as well checking for regional routing.`
 
-The script will auto-download psping if not yet exists in script folder.
-> PSPING: <https://docs.microsoft.com/en-us/sysinternals/downloads/psping/>
+---
 
 **Requirements:**
 
@@ -24,9 +31,44 @@ The script will auto-download psping if not yet exists in script folder.
 **EXAMPLES:**
 
 ```powershell
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Iterations 10
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv -CsvFilepath "c:\temp\results.txt"
+```
+
+```txt
+Region             Endpoint                                     DnsName        RTTMin RTTAvg RTTMax RTTs                 IPAddr
+------             --------                                     -------        ------ ------ ------ ----                 ------
+Europe West        speedtestwe.blob.core.windows.net            ams06prdstr14a      1     13     46 {46, 3, 2, 1}        52.239.213.4
+UK South           speedtestuks.blob.core.windows.net           ln1prdstr05a        9     10     10 {10, 10, 9, 9}       51.141.129.74
+Germany North      speedtestden.blob.core.windows.net           ber20prdstr02a     11     34     93 {12, 21, 11, 93}     20.38.115.4
+UK West            speedtestukw.blob.core.windows.net           cw1prdstr23a       12     20     30 {24, 30, 14, 12}     20.150.52.4
+France Central     speedtestfrc.blob.core.windows.net           par21prdstr01a     12     17     27 {27, 13, 12, 17}     52.239.134.100
+Europe North       speedtestne.blob.core.windows.net            db3prdstr11a       16     24     45 {17, 45, 17, 16}     52.239.137.4
+Switzerland West   speedtestchw.blob.core.windows.net           gva20prdstr02a     22     30     49 {25, 22, 22, 49}     52.239.250.4
+Canada Central     speedtestcac.blob.core.windows.net           yto22prdstr04a     97    152    305 {108, 305, 99, 97}   20.150.100.65
+US North Central   speedtestnsus.blob.core.windows.net          chi21prdstr01a     99    167    244 {99, 143, 244, 182}  52.239.186.36
+US Central         speedtestcus.blob.core.windows.net           dm5prdstr12a      103    118    156 {156, 104, 103, 110} 52.239.151.138
+Canada East        speedtestcae.blob.core.windows.net           yq1prdstr10a      105    118    134 {112, 105, 134, 121} 20.150.1.4
+US South Central   speedtestscus.blob.core.windows.net          sn4prdstr09a      112    169    292 {112, 115, 292, 157} 52.239.158.138
+US West Central    speedtestwestcentralus.blob.core.windows.net cy4prdstr01a      117    204    363 {363, 171, 117, 166} 13.78.152.64
+UAE North          speedtestuaen.blob.core.windows.net          dxb20prdstr02a    123    171    270 {125, 123, 270, 166} 52.239.233.228
+India West         speedtestwestindia.blob.core.windows.net     bm1prdstr01a      125    175    281 {128, 281, 167, 125} 104.211.168.16
+India East         speedtesteastindia.blob.core.windows.net     ma1prdstr07a      143    212    387 {387, 175, 144, 143} 52.239.135.164
+Asia Southeast     speedtestsea.blob.core.windows.net           sg2prdstr02a      158    202    328 {158, 328, 165, 158} 52.163.176.16
+South Africa North speedtestsan.blob.core.windows.net           jnb21prdstr01a    184    199    221 {221, 203, 184, 188} 52.239.232.36
+Asia East          speedtestea.blob.core.windows.net            hk2prdstr06a      193    218    272 {196, 272, 193, 212} 52.175.112.16
+Brazil East        speedtestnea.blob.core.windows.net           cq2prdstr01a      201    308    392 {201, 269, 392, 371} 191.232.216.52
+Japan West         speedtestjpw.blob.core.windows.net           os1prdstr02a      234    270    368 {234, 239, 368, 238} 52.239.146.10
+AUS Southeast      speedtestozse.blob.core.windows.net          mel20prdstr02a    243    289    364 {244, 306, 364, 243} 52.239.132.164
+AUS East           speedtestoze.blob.core.windows.net           sy3prdstr07a      247    269    309 {309, 248, 247, 271} 52.239.130.74
+```
+
+```powershell
 .\measure-latency-to-azure-endpoints-via-psping.ps1
 .\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv
-.\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv "c:\temp\results.txt"
+.\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv -CsvFilepath "c:\temp\results.txt"
 ```
 
 ```txt
