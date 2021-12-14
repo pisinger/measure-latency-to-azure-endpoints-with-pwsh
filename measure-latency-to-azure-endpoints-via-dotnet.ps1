@@ -63,7 +63,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
     $Endpoint = $_.value
 	$Region = $_.name
 	$i = 0	
-	$Timings = @()
+	[System.Collections.ArrayList]$Timings = @()
 	
 	try {
 		# for any endpoint do it multiple times to calc some avg
@@ -73,7 +73,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			$TcpSocket.NoDelay = $true
 			
 			# add/save timings for each iteration -> to calc avg
-			$Timings += [math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds)			
+			$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds))	| out-null
 			$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
 			
 			# release/close
@@ -86,16 +86,16 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 		($global:error[0].exception.response)
 	}
 	finally{
-
 		# remove first warmup connect
-		$Timings = $Timings[1..($Timings.count - 1)]
+		$Timings.remove($Timings[0])		
+		# RTTAvg does have highest and lowest value excluded
 		
 		$obj = [PSCustomObject]@{				
 			Region 		= $Region
 			Endpoint 	= $Endpoint
 			DnsName		= ((Resolve-DnsName $Endpoint).NameHost -split '\.')[1]
 			RTTMin		= ($Timings | Measure-Object -Min).Minimum
-			RTTAvg		= [math]::round(($Timings | Measure-Object -Sum).sum / $Timings.count)
+			RTTAvg		= [math]::round( (($timings | sort -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)
 			RTTMax		= ($Timings | Measure-Object -Max).Maximum
 			RTTs 		= $Timings
 			IPAddr		= $IpAddr
