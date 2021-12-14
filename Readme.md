@@ -22,6 +22,8 @@ The psping-based script will also auto-download psping itself if not yet exists 
 **Requirements:**
 
 ```diff
++ PowerShell Core
+
 + Direct Connectivity allowing TCP 443 outbound
 + DNS Client Resolution
 - Not working when proxy usage is required
