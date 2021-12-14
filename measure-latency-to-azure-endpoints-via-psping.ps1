@@ -3,7 +3,8 @@
 <#
 	As latency is the new cloud currency I decided to create a PowerShell script which does make use of PSPING to do latency checks. 
 	In fact, this script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in $endpoints hash table
-	by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
+	
+	By default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
 
 	The script will also auto-download psping if not yet exists in script folder.
 	PSPING: https://docs.microsoft.com/en-us/sysinternals/downloads/psping
@@ -11,7 +12,7 @@
 	EXAMPLE: 
 		.\measure-latency-to-azure-endpoints-via-psping.ps1
 		.\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv
-		.\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv c:\temp\results.txt
+		.\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv -CsvFilepath c:\temp\results.txt
 #>
 
 param(
