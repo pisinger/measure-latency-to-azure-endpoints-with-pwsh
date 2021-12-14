@@ -2,6 +2,8 @@
 
 As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In addition, this repo does now also offer a script doing the same in `.NET`. So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
 
+`This might be helpful in case you want to run latency checks automated from internal clients or edge devices, as well checking for regional routing.`
+
 ---
 
 **measure-latency-to-azure-endpoints-via-psping.ps1:** This script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
@@ -16,8 +18,6 @@ The psping-based script will also auto-download psping itself if not yet exists 
 ---
 
 > Note: PowerShell Core required: <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/>
-
-`This might be helpful in case you want to run latency checks automated from internal Windows clients or edge devices, as well checking for regional routing.`
 
 **Requirements:**
 
