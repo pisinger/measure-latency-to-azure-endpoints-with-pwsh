@@ -1,6 +1,6 @@
 # measure-latency-to-azure-endpoints-with-pwsh
 
-As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In addition, this repo does now also offer a script doing the same in .NET.` So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
+As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In addition, this repo does now also offer a script doing the same in `.NET`. So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
 
 ---
 
