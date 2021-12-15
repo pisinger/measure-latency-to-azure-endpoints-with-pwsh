@@ -66,42 +66,65 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 	$i = 0	
 	[System.Collections.ArrayList]$Timings = @()
 	
-	try {
-		# for any endpoint do it multiple times to calc some avg
-		# iterations +1 as first connect is been used as warmup
-		while ($i -lt $($using:Iterations + 1)) {
-			$TcpSocket = New-Object System.Net.Sockets.Socket([System.Net.Sockets.SocketType]::Stream,[System.Net.Sockets.ProtocolType]::Tcp)
-			$TcpSocket.NoDelay = $true
+	# check first if dns/endpoint exists
+	IF ( $DnsName = Resolve-DnsName $Endpoint -ErrorAction SilentlyContinue) {	
+		try {
+			# for any endpoint do it multiple times to calc some avg
+			# iterations +1 as first connect is been used as warmup
+			while ($i -lt $($using:Iterations + 1)) {
+				$TcpSocket = New-Object System.Net.Sockets.Socket([System.Net.Sockets.SocketType]::Stream,[System.Net.Sockets.ProtocolType]::Tcp)
+				$TcpSocket.NoDelay = $true
+				
+				# add/save timings for each iteration -> to calc avg
+				$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds))	| out-null
+				$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
+				
+				# release/close
+				$TcpSocket.Dispose()
+				$i++
+			}
+		}
+		catch{
+			write-host $_.Exception.Message
+			($global:error[0].exception.response)
+		}
+		finally{
+			# remove first warmup connect
+			$Timings.remove($Timings[0])
 			
-			# add/save timings for each iteration -> to calc avg
-			$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds))	| out-null
-			$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
+			# check if timings is not null
+			IF (($Timings)) {
+				# RTTAvg does have highest and lowest value excluded
+				$RTTAvg = [math]::round( (($timings | sort -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)
+			}
+			ELSE {
+				$RTTAvg = ""
+			}			
 			
-			# release/close
+			$obj = [PSCustomObject]@{				
+				Region 		= $Region
+				Endpoint 	= $Endpoint
+				DnsName		= ($DnsName.NameHost -split '\.')[1]
+				RTTMin		= ($Timings | Measure-Object -Min).Minimum
+				RTTAvg		= $RTTAvg
+				RTTMax		= ($Timings | Measure-Object -Max).Maximum
+				RTTs 		= $Timings
+				IPAddr		= $IpAddr
+			}
 			$TcpSocket.Dispose()
-			$i++
 		}
 	}
-	catch{
-		write-host $_.Exception.Message
-		($global:error[0].exception.response)
-	}
-	finally{
-		# remove first warmup connect
-		$Timings.remove($Timings[0])		
-		# RTTAvg does have highest and lowest value excluded
-		
+	ELSE {
 		$obj = [PSCustomObject]@{				
 			Region 		= $Region
 			Endpoint 	= $Endpoint
-			DnsName		= ((Resolve-DnsName $Endpoint).NameHost -split '\.')[1]
-			RTTMin		= ($Timings | Measure-Object -Min).Minimum
-			RTTAvg		= [math]::round( (($timings | sort -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)
-			RTTMax		= ($Timings | Measure-Object -Max).Maximum
-			RTTs 		= $Timings
-			IPAddr		= $IpAddr
+			DnsName		= "NOT FOUND"
+			RTTMin		= ""
+			RTTAvg		= ""
+			RTTMax		= ""
+			RTTs 		= @()
+			IPAddr		= ""
 		}
-		$TcpSocket.Dispose()
 	}
 	
 	return $obj
