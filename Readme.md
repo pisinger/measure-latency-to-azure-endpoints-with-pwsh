@@ -13,7 +13,7 @@ The psping-based script will also auto-download psping itself if not yet exists 
 
 ---
 
-**measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. By default it will make 4 consequent TCP connects to grab average timings - you can adjust this by changing "iterations" param. Beside of AVG it will give you also the MIN and MAX latency value.
+**measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. By default it will make 4 consequent TCP connects to grab average timings (at least 3 connect attempts required) - you can adjust this by changing "iterations" param. Beside of AVG it will give you also the MIN and MAX latency value - for the average the lowest and highest value will be excluded.
 
 ---
 
