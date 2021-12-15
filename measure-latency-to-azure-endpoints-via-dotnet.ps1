@@ -17,6 +17,7 @@
 param(
 	[switch]$ExportToCsv,
 	[string]$CsvFilepath = $($PSScriptRoot + "\measure-latency-to-azure-results.csv"),
+	[ValidateRange(3,10)]
 	[int]$Iterations = 4,
 	[ValidateRange(1,65535)]
 	[int]$Port = 443
@@ -77,7 +78,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
 			
 			# release/close
-			$TcpSocket.Dispose()			
+			$TcpSocket.Dispose()
 			$i++
 		}
 	}
