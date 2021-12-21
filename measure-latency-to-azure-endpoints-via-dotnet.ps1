@@ -66,67 +66,53 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 	$i = 0	
 	[System.Collections.ArrayList]$Timings = @()
 	
-	# check first if dns/endpoint exists
-	IF ( $DnsName = Resolve-DnsName $Endpoint -ErrorAction SilentlyContinue) {	
-		try {
+	try {
+		# check first if dns/endpoint exists
+		IF ( $DnsName = Resolve-DnsName $Endpoint -ErrorAction SilentlyContinue) {
 			# for any endpoint do it multiple times to calc some avg
 			# iterations +1 as first connect is been used as warmup
 			while ($i -lt $($using:Iterations + 1)) {
 				$TcpSocket = New-Object System.Net.Sockets.Socket([System.Net.Sockets.SocketType]::Stream,[System.Net.Sockets.ProtocolType]::Tcp)
 				$TcpSocket.NoDelay = $true
-				
+					
 				# add/save timings for each iteration -> to calc avg
 				$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds))	| out-null
 				$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
-				
+					
 				# release/close
 				$TcpSocket.Dispose()
 				$i++
 			}
 		}
-		catch{
-			write-host $_.Exception.Message
-			($global:error[0].exception.response)
-		}
-		finally{
-			# remove first warmup connect
-			$Timings.remove($Timings[0])
-			
-			# check if timings is not null
-			IF (($Timings)) {
-				# RTTAvg does have highest and lowest value excluded
-				$RTTAvg = [math]::round( (($timings | sort -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)
-			}
-			ELSE {
-				$RTTAvg = ""
-			}			
-			
-			$obj = [PSCustomObject]@{				
-				Region 		= $Region
-				Endpoint 	= $Endpoint
-				DnsName		= ($DnsName.NameHost -split '\.')[1]
-				RTTMin		= ($Timings | Measure-Object -Min).Minimum
-				RTTAvg		= $RTTAvg
-				RTTMax		= ($Timings | Measure-Object -Max).Maximum
-				RTTs 		= $Timings
-				IPAddr		= $IpAddr
-			}
-			$TcpSocket.Dispose()
-		}
 	}
-	ELSE {
+	catch{
+		write-host $_.Exception.Message
+		($global:error[0].exception.response)
+	}
+	finally{
+		# remove first warmup connect
+		$Timings.remove($Timings[0])
+		
+		# dns error
+		if (-not($DnsName)) { $DnsName = "NOT FOUND"}
+		else { $DnsName = ($DnsName.NameHost -split '\.')[1] }
+		
+		# check if timings is not null
+		# RTTAvg does have highest and lowest value excluded
+		IF (($Timings)) { $RTTAvg = [math]::round( (($timings | Sort-Object -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)	}
+		ELSE { $RTTAvg = "" }
+		
 		$obj = [PSCustomObject]@{				
 			Region 		= $Region
 			Endpoint 	= $Endpoint
-			DnsName		= "NOT FOUND"
-			RTTMin		= ""
-			RTTAvg		= ""
-			RTTMax		= ""
-			RTTs 		= @()
-			IPAddr		= ""
+			DnsName		= $DnsName
+			RTTMin		= ($Timings | Measure-Object -Min).Minimum
+			RTTAvg		= $RTTAvg
+			RTTMax		= ($Timings | Measure-Object -Max).Maximum
+			RTTs 		= $Timings
+			IPAddr		= $IpAddr
 		}
 	}
-	
 	return $obj
 } -ThrottleLimit 30
 
@@ -136,5 +122,5 @@ IF ($ExportToCsv){
 	$LatencyCheck | Sort-Object Endpoint | Select-Object Region, Endpoint, DnsName, RTTMin, RTTAvg, RTTMax, IpAddr | export-Csv $CsvFilepath -Append
 }
 ELSE {
-	$LatencyCheck | Sort-Object RTTMin | FT
+	$LatencyCheck | Sort-Object RTTMin | Format-Table
 }
