@@ -86,7 +86,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 		}
 	}
 	catch{
-		write-host $_.Exception.Message
+		write-error $_.Exception.Message
 		($global:error[0].exception.response)
 	}
 	finally{
