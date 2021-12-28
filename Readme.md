@@ -76,7 +76,7 @@ AUS Southeast      speedtestozse.blob.core.windows.net          blob     mel20pr
 AUS East           speedtestoze.blob.core.windows.net           blob     sy3prdstr07a      244    246    247 {244, 246, 247, 246} 52.239.130.74
 ```
 
-To run it against other endpoints simply adjust the `$endpoints` array as shown below.
+To run it against other endpoints simply adjust the `$endpoints` hash table as shown below.
 
 ```powershell
 $Endpoints = @{
