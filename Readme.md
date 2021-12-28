@@ -41,31 +41,59 @@ The psping-based script will also auto-download psping itself if not yet exists 
 ```
 
 ```txt
-Region             Endpoint                                     DnsName        RTTMin RTTAvg RTTMax RTTs                 IPAddr
-------             --------                                     -------        ------ ------ ------ ----                 ------
-Europe West        speedtestwe.blob.core.windows.net            ams06prdstr14a      1     13     46 {46, 3, 2, 1}        52.239.213.4
-UK South           speedtestuks.blob.core.windows.net           ln1prdstr05a        9     10     10 {10, 10, 9, 9}       51.141.129.74
-Germany North      speedtestden.blob.core.windows.net           ber20prdstr02a     11     34     93 {12, 21, 11, 93}     20.38.115.4
-UK West            speedtestukw.blob.core.windows.net           cw1prdstr23a       12     20     30 {24, 30, 14, 12}     20.150.52.4
-France Central     speedtestfrc.blob.core.windows.net           par21prdstr01a     12     17     27 {27, 13, 12, 17}     52.239.134.100
-Europe North       speedtestne.blob.core.windows.net            db3prdstr11a       16     24     45 {17, 45, 17, 16}     52.239.137.4
-Switzerland West   speedtestchw.blob.core.windows.net           gva20prdstr02a     22     30     49 {25, 22, 22, 49}     52.239.250.4
-Canada Central     speedtestcac.blob.core.windows.net           yto22prdstr04a     97    152    305 {108, 305, 99, 97}   20.150.100.65
-US North Central   speedtestnsus.blob.core.windows.net          chi21prdstr01a     99    167    244 {99, 143, 244, 182}  52.239.186.36
-US Central         speedtestcus.blob.core.windows.net           dm5prdstr12a      103    118    156 {156, 104, 103, 110} 52.239.151.138
-Canada East        speedtestcae.blob.core.windows.net           yq1prdstr10a      105    118    134 {112, 105, 134, 121} 20.150.1.4
-US South Central   speedtestscus.blob.core.windows.net          sn4prdstr09a      112    169    292 {112, 115, 292, 157} 52.239.158.138
-US West Central    speedtestwestcentralus.blob.core.windows.net cy4prdstr01a      117    204    363 {363, 171, 117, 166} 13.78.152.64
-UAE North          speedtestuaen.blob.core.windows.net          dxb20prdstr02a    123    171    270 {125, 123, 270, 166} 52.239.233.228
-India West         speedtestwestindia.blob.core.windows.net     bm1prdstr01a      125    175    281 {128, 281, 167, 125} 104.211.168.16
-India East         speedtesteastindia.blob.core.windows.net     ma1prdstr07a      143    212    387 {387, 175, 144, 143} 52.239.135.164
-Asia Southeast     speedtestsea.blob.core.windows.net           sg2prdstr02a      158    202    328 {158, 328, 165, 158} 52.163.176.16
-South Africa North speedtestsan.blob.core.windows.net           jnb21prdstr01a    184    199    221 {221, 203, 184, 188} 52.239.232.36
-Asia East          speedtestea.blob.core.windows.net            hk2prdstr06a      193    218    272 {196, 272, 193, 212} 52.175.112.16
-Brazil East        speedtestnea.blob.core.windows.net           cq2prdstr01a      201    308    392 {201, 269, 392, 371} 191.232.216.52
-Japan West         speedtestjpw.blob.core.windows.net           os1prdstr02a      234    270    368 {234, 239, 368, 238} 52.239.146.10
-AUS Southeast      speedtestozse.blob.core.windows.net          mel20prdstr02a    243    289    364 {244, 306, 364, 243} 52.239.132.164
-AUS East           speedtestoze.blob.core.windows.net           sy3prdstr07a      247    269    309 {309, 248, 247, 271} 52.239.130.74
+Region             Endpoint                                     DnsName1 DnsName2       RTTMin RTTAvg RTTMax RTTs                 IPAddr
+------             --------                                     -------- --------       ------ ------ ------ ----                 ------
+Europe West        speedtestwe.blob.core.windows.net            blob     ams06prdstr14a      1      2      3 {2, 1, 3, 1}         52.239.213.4
+UK South           speedtestuks.blob.core.windows.net           blob     ln1prdstr05a        8      8     10 {8, 10, 8, 9}        51.141.129.74
+France Central     speedtestfrc.blob.core.windows.net           blob     par21prdstr01a     10     11     13 {13, 12, 10, 10}     52.239.134.100
+UK West            speedtestukw.blob.core.windows.net           blob     cw1prdstr23a       12     18     57 {14, 57, 12, 23}     20.150.52.4
+Germany North      speedtestden.blob.core.windows.net           blob     ber20prdstr02a     13     26     37 {13, 37, 29, 24}     20.38.115.4
+Europe North       speedtestne.blob.core.windows.net            blob     db3prdstr11a       16     17     18 {17, 18, 17, 16}     52.239.137.4
+Switzerland West   speedtestchw.blob.core.windows.net           blob     gva20prdstr02a     21     24     62 {62, 21, 25, 22}     52.239.250.4
+Switzerland North  speedtestchn.blob.core.windows.net           blob     zrh20prdstr02a     21     23     24 {23, 21, 24, 23}     52.239.251.68
+US East            speedtesteus.blob.core.windows.net           blob     bl6prdstr05a       81     89    105 {97, 81, 105, 81}    52.240.48.36
+Canada Central     speedtestcac.blob.core.windows.net           blob     yto22prdstr04a     96     97    112 {96, 96, 98, 112}    20.150.100.65
+US North Central   speedtestnsus.blob.core.windows.net          blob     chi21prdstr01a     99    101    102 {99, 101, 102, 101}  52.239.186.36
+US Central         speedtestcus.blob.core.windows.net           blob     dm5prdstr12a      104    108    137 {137, 107, 108, 104} 52.239.151.138
+Canada East        speedtestcae.blob.core.windows.net           blob     yq1prdstr10a      105    116    142 {125, 142, 106, 105} 20.150.1.4
+US South Central   speedtestscus.blob.core.windows.net          blob     sn4prdstr09a      113    115    116 {115, 113, 115, 116} 52.239.158.138
+US West Central    speedtestwestcentralus.blob.core.windows.net blob     cy4prdstr01a      117    121    123 {123, 120, 122, 117} 13.78.152.64
+UAE North          speedtestuaen.blob.core.windows.net          blob     dxb20prdstr02a    123    123    145 {123, 123, 145, 123} 52.239.233.228
+India West         speedtestwestindia.blob.core.windows.net     blob     bm1prdstr01a      124    132    155 {124, 141, 155, 124} 104.211.168.16
+India Central      speedtestcentralindia.blob.core.windows.net  blob     pn1prdstr03a      126    132    153 {127, 126, 138, 153} 104.211.109.52
+India East         speedtesteastindia.blob.core.windows.net     blob     ma1prdstr07a      140    143    147 {142, 140, 147, 144} 52.239.135.164
+US West            speedtestwus.blob.core.windows.net           blob     sjc20prdstr12a    141    143    165 {141, 143, 143, 165} 52.239.228.228
+Asia Southeast     speedtestsea.blob.core.windows.net           blob     sg2prdstr02a      157    159    174 {160, 174, 157, 158} 52.163.176.16
+South Africa North speedtestsan.blob.core.windows.net           blob     jnb21prdstr01a    179    184    205 {179, 205, 184, 183} 52.239.232.36
+Asia East          speedtestea.blob.core.windows.net            blob     hk2prdstr06a      189    189    191 {189, 189, 189, 191} 52.175.112.16
+Brazil East        speedtestnea.blob.core.windows.net           blob     cq2prdstr01a      197    198    200 {200, 197, 198, 197} 191.232.216.52
+Brazil South       speedtestbs.blob.core.windows.net            blob     cq2prdstr03a      198    200    209 {199, 209, 200, 198} 191.233.128.42
+Korea South        speedtestkoreasouth.blob.core.windows.net    blob     ps1prdstr01a      217    218    219 {219, 217, 218, 217} 52.231.168.142
+Korea Central      speedtestkoreacentral.blob.core.windows.net  blob     se1prdstr01a      222    224    242 {242, 222, 224, 223} 52.231.80.94
+Japan East         speedtestjpe.blob.core.windows.net           blob     tyo22prdstr02a    224    224    258 {258, 224, 224, 225} 52.239.145.36
+Japan West         speedtestjpw.blob.core.windows.net           blob     os1prdstr02a      234    236    272 {272, 238, 235, 234} 52.239.146.10
+AUS Southeast      speedtestozse.blob.core.windows.net          blob     mel20prdstr02a    240    242    243 {243, 243, 242, 240} 52.239.132.164
+AUS East           speedtestoze.blob.core.windows.net           blob     sy3prdstr07a      244    246    247 {244, 246, 247, 246} 52.239.130.74
+```
+
+To run it against other endpoints simply adjust the `$endpoints` array as shown below.
+
+```powershell
+$Endpoints = @{
+    "Exchange"  = "outlook.office.com"
+    "worldaz"   = "worldaz.tr.teams.microsoft.com"
+    "euaz"      = "euaz.tr.teams.microsoft.com"
+    "usaz"      = "usaz.tr.teams.microsoft.com"
+}
+```
+
+```txt
+Region   Endpoint                       DnsName1            DnsName2   RTTMin RTTAvg RTTMax RTTs                IPAddr
+------   --------                       --------            --------   ------ ------ ------ ----                ------
+Exchange outlook.office.com             AMS-efz             ms-acdc         2      6   3004 {2, 2, 3004, 11}    52.97.137.66
+worldaz  worldaz.tr.teams.microsoft.com a-tr-teasc-euwe-02  westeurope     12     18     36 {12, 16, 36, 19}    52.114.255.255
+euaz     euaz.tr.teams.microsoft.com    a-tr-teasc-ukso-04  uksouth        14     22     24 {23, 24, 22, 14}    52.114.252.9
+usaz     usaz.tr.teams.microsoft.com    a-tr-teasc-usea2-02 eastus2        99    106    112 {99, 104, 112, 109} 52.115.63.12
 ```
 
 ```powershell
