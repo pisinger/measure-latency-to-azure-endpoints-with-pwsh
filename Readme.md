@@ -102,6 +102,10 @@ usaz     usaz.tr.teams.microsoft.com    a-tr-teasc-usea2-02 eastus2        99   
 .\measure-latency-to-azure-endpoints-via-psping.ps1 -ExportToCsv -CsvFilepath "c:\temp\results.txt"
 ```
 
+---
+
+**EXAMPLES - psping version:**
+
 ```txt
 Region             Endpoint                                     DnsName           RTT IPAddr
 ------             --------                                     -------           --- ------
