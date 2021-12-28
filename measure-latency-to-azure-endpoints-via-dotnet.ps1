@@ -95,7 +95,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 		
 		# dns error
 		if (-not($DnsName)) { $DnsName = "NOT FOUND"}
-		else { $DnsName = ($DnsName.NameHost -split '\.')[1] }
+		else { $DnsName = ((($DnsName | where-object QueryType -eq A).Name | select -First 1) -split '\.')[0..1] }
 		
 		# check if timings is not null
 		# RTTAvg does have highest and lowest value excluded
@@ -105,7 +105,8 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 		$obj = [PSCustomObject]@{				
 			Region 		= $Region
 			Endpoint 	= $Endpoint
-			DnsName		= $DnsName
+			DnsName1	= $DnsName[0]
+			DnsName2	= $DnsName[1]
 			RTTMin		= ($Timings | Measure-Object -Min).Minimum
 			RTTAvg		= $RTTAvg
 			RTTMax		= ($Timings | Measure-Object -Max).Maximum
