@@ -6,7 +6,7 @@ As `latency is the new cloud currency` I decided to create a PowerShell script w
 
 ---
 
-**measure-latency-to-azure-endpoints-via-psping.ps1:** This script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
+**measure-latency-to-azure-endpoints-via-psping.ps1:** This script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
 
 The psping-based script will also auto-download psping itself if not yet exists in script folder.
 > PSPING: <https://docs.microsoft.com/en-us/sysinternals/downloads/psping/>
@@ -76,24 +76,30 @@ AUS Southeast      speedtestozse.blob.core.windows.net          blob     mel20pr
 AUS East           speedtestoze.blob.core.windows.net           blob     sy3prdstr07a      244    246    247 {244, 246, 247, 246} 52.239.130.74
 ```
 
-To run it against other endpoints simply adjust the `$endpoints` hash table as shown below.
+To run it against other endpoints simply adjust the `$endpoints` hash table as shown below. You can also specify a different port to be used by just adding the desired port as `:5061` or `:80`.
 
 ```powershell
 $Endpoints = @{
-    "Exchange"  = "outlook.office.com"
-    "worldaz"   = "worldaz.tr.teams.microsoft.com"
-    "euaz"      = "euaz.tr.teams.microsoft.com"
-    "usaz"      = "usaz.tr.teams.microsoft.com"
+    "Exchange"      = "outlook.office.com"
+    "worldaz"       = "worldaz.tr.teams.microsoft.com"
+    "euaz"          = "euaz.tr.teams.microsoft.com"
+    "usaz"          = "usaz.tr.teams.microsoft.com"
+    "PSTN Hub 1"    = "sip.pstnhub.microsoft.com:5061"
+    "PSTN Hub 2"    = "sip2.pstnhub.microsoft.com:5061"
+    "PSTN Hub 3"    = "sip3.pstnhub.microsoft.com:5061"
 }
 ```
 
 ```txt
-Region   Endpoint                       DnsName1            DnsName2   RTTMin RTTAvg RTTMax RTTs                IPAddr
-------   --------                       --------            --------   ------ ------ ------ ----                ------
-Exchange outlook.office.com             AMS-efz             ms-acdc         2      6   3004 {2, 2, 3004, 11}    52.97.137.66
-worldaz  worldaz.tr.teams.microsoft.com a-tr-teasc-euwe-02  westeurope     12     18     36 {12, 16, 36, 19}    52.114.255.255
-euaz     euaz.tr.teams.microsoft.com    a-tr-teasc-ukso-04  uksouth        14     22     24 {23, 24, 22, 14}    52.114.252.9
-usaz     usaz.tr.teams.microsoft.com    a-tr-teasc-usea2-02 eastus2        99    106    112 {99, 104, 112, 109} 52.115.63.12
+Region     Endpoint                       Port DnsName1           DnsName2      RTTMin RTTAvg RTTMax RTTs                 IPAddr
+------     --------                       ---- --------           --------      ------ ------ ------ ----                 ------
+PSTN Hub 1 sip.pstnhub.microsoft.com      5061 sip-du-a-euwe      westeurope         2      2     10 {2, 10, 3, 2}        52.114.75.24
+Exchange   outlook.office.com             443  AMS-efz            ms-acdc            2      2      2 {2, 2, 2, 2}         52.97.200.178
+worldaz    worldaz.tr.teams.microsoft.com 443  a-tr-teasc-ukwe-05 ukwest            23     42     81 {23, 40, 81, 45}     52.114.94.220
+euaz       euaz.tr.teams.microsoft.com    443  a-tr-teasc-ukwe-01 ukwest            26     33     84 {26, 29, 84, 37}     52.113.202.62
+usaz       usaz.tr.teams.microsoft.com    443  a-tr-teasc-usea-04 eastus            99    144    186 {124, 164, 186, 99}  52.114.141.6
+PSTN Hub 2 sip2.pstnhub.microsoft.com     5061 sip-du-a-uswe2     westus2          139    146    150 {150, 144, 139, 149} 52.114.148.0
+PSTN Hub 3 sip3.pstnhub.microsoft.com     5061 sip-du-a-asse      southeastasia    158    168    175 {162, 173, 175, 158} 52.114.14.70
 ```
 
 ```powershell
