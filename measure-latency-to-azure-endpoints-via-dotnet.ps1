@@ -63,6 +63,16 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 
     $Endpoint = $_.value
 	$Region = $_.name
+	
+	# check for custom port in $endpoints
+	IF ($Endpoint -match ":") {
+		$Port = $Endpoint.Split(":",2)[1]
+		$Endpoint = $Endpoint.Split(":",2)[0]
+	}
+	ELSE {
+		$Port = $using:Port
+	}
+	
 	$i = 0	
 	[System.Collections.ArrayList]$Timings = @()
 	
@@ -76,7 +86,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 				$TcpSocket.NoDelay = $true
 					
 				# add/save timings for each iteration -> to calc avg
-				$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $using:Port) }).TotalMilliseconds))	| out-null
+				$Timings.add([math]::round((Measure-Command { $TcpSocket.Connect($Endpoint, $Port) }).TotalMilliseconds))	| out-null
 				$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
 					
 				# release/close
@@ -105,6 +115,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 		$obj = [PSCustomObject]@{				
 			Region 		= $Region
 			Endpoint 	= $Endpoint
+			Port		= $Port
 			DnsName1	= $DnsName[0]
 			DnsName2	= $DnsName[1]
 			RTTMin		= ($Timings | Measure-Object -Min).Minimum
