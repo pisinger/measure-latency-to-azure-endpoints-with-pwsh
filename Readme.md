@@ -2,22 +2,19 @@
 
 As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In addition, this repo does now also offer a script doing the same in `.NET`. So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
 
-> Note: PowerShell Core required: <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/>
+> Note: PowerShell Core required: <br/>
+> <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/> <br/>
+> <https://aka.ms/GetPowershell/>
 
 `This might be helpful in case you want to run latency checks automated from internal clients or edge devices, as well checking for regional routing.`
 
 ---
 
-**measure-latency-to-azure-endpoints-via-psping.ps1 (-archived-):** This script does leverage PSPING for checking latency by doing TCP handshakes to the endpoints specified in `$endpoints` hash table - by default it will trigger PSPING to make 3 TCP connects and will then simply grab the average timings provided by psping.
-
-The psping-based script will also auto-download psping itself if not yet exists in script folder.
-> PSPING: <https://docs.microsoft.com/en-us/sysinternals/downloads/psping/>
-
----
-
 **measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
 
-By default it will make `4` consequent TCP connects to grab average timings (at least 3 connect attempts required) - you can adjust this by changing `iterations` param. Beside of AVG it will give you also the MIN and MAX latency value - for the average the lowest and highest value will be excluded.
+It does now also provide limited proxy support - so when you have the requirement to use a proxy to connect to the internet, then try to run the script together with the `$Proxy` switch.
+
+By default it will make `4` consequent TCP connects to grab average timings (at least 3 connect attempts required) - you can adjust this by changing `$iterations` param. Beside of AVG it will give you also the MIN and MAX latency value - for the average the lowest and highest value will be excluded.
 
 ---
 
@@ -26,9 +23,9 @@ By default it will make `4` consequent TCP connects to grab average timings (at 
 ```diff
 + PowerShell Core
 
-+ Direct Connectivity allowing TCP 443 outbound
++ Direct Connectivity allowing TCP 443 outbound (or the custom port you defined)
 + DNS Client Resolution
-- Not working when proxy usage is required
+- Proxy Support not tested in depth
 ```
 
 `You could also replace the pre-defined Azure Endpoints by some other M365 endpoints, or just to any endpoint you are interested in, as well changing the connecting port.`
@@ -38,6 +35,7 @@ By default it will make `4` consequent TCP connects to grab average timings (at 
 ```powershell
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Iterations 10
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Proxy -Iterations 5
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv -CsvFilepath "c:\temp\results.txt"
 ```
@@ -102,4 +100,25 @@ euaz       euaz.tr.teams.microsoft.com    443  a-tr-teasc-ukwe-01 ukwest        
 usaz       usaz.tr.teams.microsoft.com    443  a-tr-teasc-usea-04 eastus            99    144    186 {124, 164, 186, 99}  52.114.141.6
 PSTN Hub 2 sip2.pstnhub.microsoft.com     5061 sip-du-a-uswe2     westus2          139    146    150 {150, 144, 139, 149} 52.114.148.0
 PSTN Hub 3 sip3.pstnhub.microsoft.com     5061 sip-du-a-asse      southeastasia    158    168    175 {162, 173, 175, 158} 52.114.14.70
+```
+
+When you have proxy requirement, then you can try to run the script with the `Proxy` switch instead.
+
+```txt
+Region             Endpoint                                                     Success RTTMin RTTAvg RTTMax RTTs
+------             --------                                                     ------- ------ ------ ------ ----
+UK South           https://speedtestuks.blob.core.windows.net/cb.json              True 12     12     13     {12, 13, 13, 12}
+France Central     https://speedtestfrc.blob.core.windows.net/cb.json              True 16     22     36     {23, 36, 21, 16}
+UK West            https://speedtestukw.blob.core.windows.net/cb.json              True 21     23     25     {23, 25, 21, 23}
+Europe North       https://speedtestne.blob.core.windows.net/cb.json               True 23     28     34     {23, 25, 34, 32}
+US East            https://speedtesteus.blob.core.windows.net/cb.json              True 86     86     97     {86, 97, 87, 86}
+Canada Central     https://speedtestcac.blob.core.windows.net/cb.json              True 98     98     99     {98, 98, 99, 98}
+US North Central   https://speedtestnsus.blob.core.windows.net/cb.json             True 108    108    109    {108, 109, 108, 108}
+Canada East        https://speedtestcae.blob.core.windows.net/cb.json              True 109    114    171    {109, 114, 171, 114}
+US South Central   https://speedtestscus.blob.core.windows.net/cb.json             True 119    124    143    {128, 120, 143, 119}
+US West Central    https://speedtestwestcentralus.blob.core.windows.net/cb.json    True 121    122    124    {121, 124, 123, 122}
+UAE North          https://speedtestuaen.blob.core.windows.net/cb.json             True 125    126    134    {134, 127, 125, 126}
+Korea South        https://speedtestkoreasouth.blob.core.windows.net/cb.json       True 219    220    221    {221, 219, 219, 220}
+AUS Southeast      https://speedtestozse.blob.core.windows.net/cb.json             True 244    246    248    {244, 248, 245, 246}
+AUS East           https://speedtestoze.blob.core.windows.net/cb.json              True 253    253    254    {253, 253, 253, 254}
 ```
