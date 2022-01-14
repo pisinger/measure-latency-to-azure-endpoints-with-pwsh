@@ -8,7 +8,7 @@
 	By default it will make 4 consequent TCP connects to grab average timings (at least 3 connect attempts required) - you can adjust this by changing $iterations param. Beside of AVG it will give you also the MIN and MAX latency value - for the average the lowest and highest value will be excluded.
 
 	EXAMPLE: 
-		.\measure-latency-to-azure-endpoints-via-dotnet.ps1
+		.\measure-latency-to-azure-endpoints-via-dotnet.ps1 | ft
 		.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Iterations 10
 		.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Proxy -Iterations 5
 		.\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv
@@ -93,6 +93,8 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			$HttpClient.Dispose()
 		}
 		catch {
+			$result = "False"
+			
 			write-error $_.Exception.Message
 			($global:error[0].exception.response)
 		}
@@ -141,6 +143,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 					# add/save timings for each iteration -> to calc avg
 					$Timings.add([math]::round( (Measure-Command { $TcpSocket.Connect($Endpoint, $Port) }).TotalMilliseconds)) | out-null
 					$IpAddr = (($TcpSocket.RemoteEndPoint -split "fff:",2)[1] -split "]",2)[0]
+					$result = $TcpSocket.Connected
 					
 					# release/close
 					$TcpSocket.Dispose()
@@ -149,6 +152,9 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			}
 		}
 		catch{
+			$result = $TcpSocket.Connected
+			$TcpSocket.Dispose()
+			
 			write-error $_.Exception.Message
 			($global:error[0].exception.response)
 		}
@@ -157,7 +163,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			$Timings.remove($Timings[0])
 			
 			# dns error
-			if (-not($DnsName)) { $DnsName = "NOT FOUND"}
+			if (-not($DnsName)) { $DnsName = ""; $result = "DnsFailure"}
 			else { $DnsName = ((($DnsName | where-object QueryType -eq A).Name | select -First 1) -split '\.')[0..1] }
 			
 			# check if timings is not null - RTTAvg does have highest and lowest value excluded
@@ -168,6 +174,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 				Region 		= $Region
 				Endpoint 	= $Endpoint
 				Port		= $Port
+				Success		= $result
 				DnsName1	= $DnsName[0]
 				DnsName2	= $DnsName[1]
 				RTTMin		= ($Timings | Measure-Object -Min).Minimum
@@ -184,8 +191,9 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 #----------------------------------
 # return output or export to csv
 IF ($ExportToCsv){	
-	$LatencyCheck | Sort-Object Endpoint | Select-Object Region, Endpoint, DnsName, RTTMin, RTTAvg, RTTMax, IpAddr | export-Csv $CsvFilepath -Append
+	$LatencyCheck | Sort-Object Endpoint | Select-Object Region, Endpoint, Port, Success, DnsName1, DnsName2, RTTMin, RTTAvg, RTTMax, IpAddr | export-Csv $CsvFilepath -Append
 }
 ELSE {
-	$LatencyCheck | Sort-Object RTTMin | Format-Table
+	$LatencyCheck = $LatencyCheck | Sort-Object RTTMin
+	$LatencyCheck
 }
