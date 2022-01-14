@@ -3,14 +3,14 @@
 As `latency is the new cloud currency` I decided to create a PowerShell script which does make use of `PSPING` to do latency checks. In addition, this repo does now also offer a script doing the same in `.NET`. So with that you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices.
 
 > Note: PowerShell Core required: <br/>
-> <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/> <br/>
-> <https://aka.ms/GetPowershell/>
+> * <https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows/> <br/>
+> * <https://aka.ms/GetPowershell/>
 
 `This might be helpful in case you want to run latency checks automated from internal clients or edge devices, as well checking for regional routing.`
 
 > You may also want to have a look to `AzureSpeedTest2` web utility where you can check for latency directly from within the browser: <br/>
-> <https://github.com/richorama/AzureSpeedTest2/> <br/>
-> <https://richorama.github.io/AzureSpeedTest2/>
+> * <https://github.com/richorama/AzureSpeedTest2/> <br/>
+> * <https://richorama.github.io/AzureSpeedTest2/>
 
 ---
 
