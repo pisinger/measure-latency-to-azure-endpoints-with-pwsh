@@ -10,7 +10,7 @@ As `latency is the new cloud currency` I decided to create a PowerShell script w
 
 ---
 
-**measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
+**measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell instead of leveraging psping, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
 
 It does now also provide limited proxy support - so when you have the requirement to use a proxy to connect to the internet, then try to run the script together with the `$Proxy` switch.
 
