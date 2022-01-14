@@ -37,7 +37,7 @@ By default it will make `4` consequent TCP connects to grab average timings (at 
 **EXAMPLES:**
 
 ```powershell
-.\measure-latency-to-azure-endpoints-via-dotnet.ps1
+.\measure-latency-to-azure-endpoints-via-dotnet.ps1 | ft
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Iterations 10
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -Proxy -Iterations 5
 .\measure-latency-to-azure-endpoints-via-dotnet.ps1 -ExportToCsv
