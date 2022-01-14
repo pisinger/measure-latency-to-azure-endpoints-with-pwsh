@@ -8,6 +8,10 @@ As `latency is the new cloud currency` I decided to create a PowerShell script w
 
 `This might be helpful in case you want to run latency checks automated from internal clients or edge devices, as well checking for regional routing.`
 
+> You may also want to have a look to `AzureSpeedTest2` web utility where you can check for latency directly from within the browser: <br/>
+> <https://github.com/richorama/AzureSpeedTest2/> <br/>
+> <https://richorama.github.io/AzureSpeedTest2/>
+
 ---
 
 **measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell instead of leveraging psping, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
