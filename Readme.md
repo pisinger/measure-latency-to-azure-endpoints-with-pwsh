@@ -16,9 +16,11 @@ As `latency is the new cloud currency` I decided to create a PowerShell script w
 
 **measure-latency-to-azure-endpoints-via-dotnet.ps1:** With that script you could do your latency checks natively in PowerShell instead of leveraging psping, which might be more helpful when running it from Linux-based edge devices. It again connects to the endpoints specified in `$endpoints` hash table. You can also specify different ports to be used by just adding the desired port as `:5061` or `:80`.
 
-It does now also provide limited proxy support - so when you have the requirement to use a proxy to connect to the internet, then try to run the script together with the `$Proxy` switch.
+It does now also provide support for proxy use - so when you have the requirement to use a proxy to connect to the internet, then try to run the script together with the `$Proxy` switch.
 
 By default it will make `4` consequent TCP connects to grab average timings (at least 3 connect attempts required) - you can adjust this by changing `$iterations` param. Beside of AVG it will give you also the MIN and MAX latency value - for the average the lowest and highest value will be excluded.
+
+To save your results when running the script in an automated way, simply run with the `$ExportToCsv` switch.
 
 ---
 
@@ -29,7 +31,7 @@ By default it will make `4` consequent TCP connects to grab average timings (at 
 
 + Direct Connectivity allowing TCP 443 outbound (or the custom port you defined)
 + DNS Client Resolution
-- Proxy Support not tested in depth
+- Proxy Use not tested in depth
 ```
 
 `You could also replace the pre-defined Azure Endpoints by some other M365 endpoints, or just to any endpoint you are interested in, as well changing the connecting port.`
