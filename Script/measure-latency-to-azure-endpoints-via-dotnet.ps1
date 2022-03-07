@@ -166,7 +166,7 @@ $LatencyCheck = $Endpoints.GetEnumerator() | FOREACH-OBJECT -parallel {
 			
 			# dns error
 			if (-not($DnsName)) { $DnsName = ""; $result = "DnsFailure"}
-			else { $DnsName = ((($DnsName | where-object QueryType -eq A).Name | select -First 1) -split '\.')[0..1] }
+			else { $DnsName = ((($DnsName | where-object QueryType -eq A)[-1].Name) -split '\.')[0..1] }
 			
 			# check if timings is not null - RTTAvg does have highest and lowest value excluded
 			IF (($Timings)) { $RTTAvg = [math]::round( (($timings | Sort-Object -Descending)[1..$($timings.count - 2)] | Measure-Object -Average).Average)	}
